@@ -1,0 +1,42 @@
+:root {
+  --primary-color: #ea2831;
+  --secondary-color: #6b7280;
+  --terciary-color: #ebebeb;
+  --cuarto-color: #e6e8eb;
+
+  --primary-text-color: #111827;
+  --secondary-text-color: #6b7280;
+}
+
+.hero-section {
+  margin: 1rem;
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.hero-content h1 {
+  font-weight: 800;
+  font-size: 5rem;
+  color: var(--primary-text-color);
+
+  margin: 0;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+}
+
+.hero-buttons {
+  margin-top: 4rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.hero-buttons button {
+  background-color: #ffffff;
+  padding: 10px 15px;
+  border: 2px solid var(--cuarto-color);
+  cursor: pointer;
+  border-radius: 1rem;
+}
