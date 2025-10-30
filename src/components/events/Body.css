@@ -1,0 +1,10 @@
+.body-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.info-container {
+  background-color: red;
+  width: 80%;
+}

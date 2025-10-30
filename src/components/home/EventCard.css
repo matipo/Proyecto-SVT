@@ -1,13 +1,9 @@
-:root {
-  --primary-text-color: #111827;
-  --secondary-text-color: #6b7280;
+.event-card-link {
+  text-decoration: none;
 }
 
 .event-card-main {
   border-radius: 8px;
-
-  padding: 1rem;
-
   width: 100%;
 }
 

@@ -1,14 +1,8 @@
-:root {
-  --primary-color: #ea2831;
-  --secondary-color: #6b7280;
-  --terciary-color: #ebebeb;
-}
-
 .main-header {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  margin: 0 1rem;
+  margin: 0 1.5rem;
   border-bottom: 1px solid var(--terciary-color);
 }
 

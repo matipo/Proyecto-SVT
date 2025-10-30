@@ -3,7 +3,6 @@ import { useEffect } from "react";
 
 import "./EventList.css";
 
-//Importacion del API (En este caso un .js porque el api no funciona xd)
 import mockEventsData from "./mockEvents.js";
 
 import EventCard from "./EventCard.jsx";
@@ -27,10 +26,10 @@ export default function EventList() {
   }, []);
 
   return (
-    <div className="main-container">
+    <div className="event-list-container">
       <h1>Próximos Eventos</h1>
 
-      <div className="event-list-container">
+      <div className="event-list-content">
         {apiData &&
           apiData.data.map((event) => <EventCard key={event._id} {...event} />)}
       </div>

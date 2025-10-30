@@ -4,6 +4,7 @@ import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 
 import HomePage from "./pages/HomePage";
+import EventsPage from "./pages/EventsPage";
 
 import "./App.css";
 
@@ -16,6 +17,7 @@ export default function App() {
         <main>
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/event/:eventId" element={<EventsPage />} />
           </Routes>
         </main>
 

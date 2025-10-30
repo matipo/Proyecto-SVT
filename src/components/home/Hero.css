@@ -1,15 +1,5 @@
-:root {
-  --primary-color: #ea2831;
-  --secondary-color: #6b7280;
-  --terciary-color: #ebebeb;
-  --cuarto-color: #e6e8eb;
-
-  --primary-text-color: #111827;
-  --secondary-text-color: #6b7280;
-}
-
 .hero-section {
-  margin: 1rem;
+  margin: 1.5rem;
   text-align: center;
   padding: 100px 20px;
 }

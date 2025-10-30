@@ -1,14 +1,14 @@
-.main-container {
-  margin: 1rem;
+.event-list-container {
+  margin: 1.5rem;
 
   h1 {
     margin: 0;
   }
 }
 
-.event-list-container {
+.event-list-content {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 24px;
+  gap: 2rem;
   justify-items: center;
 }
