@@ -27,7 +27,7 @@ Sigue estos pasos para configurar el proyecto y trabajar en la **branch `dev`**.
     Este comando clona el repositorio y te sitúa en la _branch_ `dev` automáticamente.
 
     ```sh
-    git clone -b dev [https://github.com/matipo/Proyecto-SVT.git](https://github.com/matipo/Proyecto-SVT.git)
+    git clone -b dev https://github.com/matipo/Proyecto-SVT.git
     cd Proyecto-SVT
     ```
 
