@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-export default function PurchaseTickets() {
+export default function PurchaseTickets({ event }) {
   const [count, setCount] = useState(1);
 
-  const [ticketType, setTicketType] = useState("general");
+  const [ticketType, setTicketType] = useState(null);
 
   const handleIncrease = () => {
     if (count < 10) {
@@ -29,8 +29,11 @@ export default function PurchaseTickets() {
           value={ticketType}
           onChange={(e) => setTicketType(e.target.value)}
         >
-          <option value="general">General</option>
-          <option value="vip">VIP</option>
+          {event.tickets.map((ticket) => (
+            <option key={ticket.type} value={ticket.type}>
+              {ticket.type}
+            </option>
+          ))}
         </select>
       </div>
 

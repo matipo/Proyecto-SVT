@@ -28,8 +28,8 @@ function Header() {
       </div>
 
       <nav className="nav-container">
-        <a href="/cart">Eventos</a>
-        <a href="#">Mis tickets</a>
+        {/* <a href="/cart">Eventos</a>
+        <a href="#">Mis tickets</a> */}
       </nav>
 
       <div className="header-actions">

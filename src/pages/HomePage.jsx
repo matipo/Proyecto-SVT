@@ -1,12 +1,12 @@
 import React from "react";
-import Hero from "../components/home/Hero";
-import EventList from "../components/home/EventList";
+import HomeHero from "../components/home/HomeHero";
+import HomeEventList from "../components/home/HomeEventList";
 
 function HomePage() {
   return (
     <div>
-      <Hero />
-      <EventList />
+      <HomeHero />
+      <HomeEventList />
     </div>
   );
 }

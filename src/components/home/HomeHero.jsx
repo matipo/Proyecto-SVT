@@ -1,6 +1,6 @@
-import "./Hero.css";
+import "./HomeHero.css";
 
-function Hero() {
+export default function HomeHero() {
   return (
     <section className="hero-section">
       <div className="hero-content">
@@ -19,4 +19,3 @@ function Hero() {
     </section>
   );
 }
-export default Hero;

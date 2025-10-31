@@ -1,30 +1,71 @@
-import { useParams, Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
 
-import Hero from "../components/events/Hero";
-import Body from "../components/events/Body.jsx";
-
-import mockEventsData from "../components/home/mockEvents.js";
+import EventHero from "../components/events/EventHero.jsx";
+import EventBody from "../components/events/EventBody.jsx";
 
 export default function EventsPage() {
   const { eventId } = useParams();
+  const BASE = import.meta.env.VITE_API_URL;
 
-  const event = mockEventsData.data.find((e) => e._id === eventId);
+  const [event, setEvent] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(null);
 
-  if (!event) {
+  useEffect(() => {
+    if (!eventId) return;
+
+    fetch(BASE + "events/" + eventId, {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+      },
+    })
+      .then((response) => {
+        if (response === 404) {
+          throw new Error("Evento no encontrado");
+        }
+
+        if (!response.ok) {
+          throw new Error("La respuesta de la red no fue 'ok'");
+        }
+
+        return response.json();
+      })
+      .then((data) => {
+        setEvent(data);
+        setIsLoading(false);
+      })
+      .then((error) => {
+        setIsError(error);
+        setIsLoading(false);
+      });
+  }, [eventId, BASE]);
+
+  if (isLoading) {
+    return <h1>Cargando evento...</h1>;
+  }
+
+  if (isError) {
     return (
       <div>
-        <h2>Evento no encontrado</h2>
-        <p>El evento con ID "{eventId}" no existe.</p>
-        <Link to="/">Volver al inicio</Link>
+        <h1>Error: {isError.message}</h1>
       </div>
     );
   }
 
+  if (!event) {
+    return (
+      <div>
+        <p>El evento con ID "{eventId}" no existe.</p>
+      </div>
+    );
+  }
   return (
     <div>
-      <Hero name={event.name} image={event.image} />
-      <Body />
+      <EventHero name={event.name} image={event.image} />
 
+      <EventBody event={event} />
       <hr />
     </div>
   );
