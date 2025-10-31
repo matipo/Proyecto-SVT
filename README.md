@@ -1,5 +1,5 @@
 <h1 align="center">
-<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="#ea2831" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-ticket"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 5l0 2" /><path d="M15 11l0 2" /><path d="M15 17l0 2" /><path d="M5 5h14a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-3a2 2 0 0 0 0 -4v-3a2 2 0 0 1 2 -2" /></svg>
+<a href="https://imgbb.com/"><img src="https://i.ibb.co/HkPdbQD/ticket.png" alt="ticket" border="0" width="100"></a>
 
 Proyecto SVT
 
@@ -36,6 +36,18 @@ Sigue estos pasos para configurar el proyecto y trabajar en la **branch `dev`**.
     ```sh
     pnpm install
     ```
+
+Este proyecto necesita variables de entorno para conectarse a la API.
+
+1.  **En la raíz del proyecto (la carpeta `Proyecto-SVT`), crea un archivo llamado `.env`.**
+
+2.  Copia y pega el siguiente contenido en ese archivo:
+
+    ```env
+    VITE_API_URL=[URL_DE_LA_API_AQUI]
+    ```
+
+    > **Nota:** Busca la `URL_DE_LA_API_AQUI` en las instrucciones del proyecto que se encuentra en [ulagosvirtual.cl](https://www.ulagosvirtual.cl/)
 
 ## 🖥️ Ejecutando el Proyecto
 
