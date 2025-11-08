@@ -1,9 +1,7 @@
-import "./Header.css";
-
-function Header() {
+export default function Header() {
   return (
-    <header className="main-header">
-      <div className="logo-container">
+    <header className="grid grid-cols-[1fr_auto_1fr] items-center mx-6 border-b border-gray-300">
+      <div className="flex items-center gap-2 justify-self-start py-4">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="30"
@@ -14,7 +12,7 @@ function Header() {
           stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
-          class="icon icon-tabler icons-tabler-outline icon-tabler-ticket"
+          class=" flex"
         >
           <path stroke="none" d="M0 0h24v24H0z" fill="none" />
           <path d="M15 5l0 2" />
@@ -22,40 +20,25 @@ function Header() {
           <path d="M15 17l0 2" />
           <path d="M5 5h14a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-3a2 2 0 0 0 0 -4v-3a2 2 0 0 1 2 -2" />
         </svg>
-        <a href="/">
-          <h1>TicketApp</h1>
+        <a href="/" className="text-black no-underline">
+          <h1 className="text-2xl font-semibold">TicketApp</h1>
         </a>
       </div>
 
-      <nav className="nav-container">
-        {/* <a href="/cart">Eventos</a>
-        <a href="#">Mis tickets</a> */}
+      <nav className="justify-self-center flex items-center">
+        <a href="/cart" className="text-black mx-4 no-underline">
+          Eventos
+        </a>
+        <a href="#" className="text-black mx-4 no-underline">
+          Mis tickets
+        </a>
       </nav>
 
-      <div className="header-actions">
-        <div className="search-bar">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#6b7280"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="icon icon-tabler icons-tabler-outline icon-tabler-search"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
-            <path d="M21 21l-6 -6" />
-          </svg>
-          <input type="text" placeholder="Buscar eventos..." />
-        </div>
-
-        <button className="create-event-button">Crear Evento</button>
+      <div className="flex items-center gap-4 justify-self-end">
+        <button className="bg-(--primary-color) text-white px-4 py-2 rounded-full text-base hover:opacity-90 transition">
+          Crear Evento
+        </button>
       </div>
     </header>
   );
 }
-export default Header;

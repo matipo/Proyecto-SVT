@@ -1,6 +1,6 @@
 import "./Footer.css";
 
-function Footer() {
+export default function Footer() {
   return (
     <footer className="main-footer">
       <div className="logo-footer-container">
@@ -34,4 +34,3 @@ function Footer() {
     </footer>
   );
 }
-export default Footer;

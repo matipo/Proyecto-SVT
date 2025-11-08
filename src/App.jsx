@@ -7,6 +7,7 @@ import HomePage from "./pages/HomePage";
 import EventsPage from "./pages/EventsPage";
 
 import "./App.css";
+import CheckoutPage from "./pages/CheckoutPage";
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/event/:eventId" element={<EventsPage />} />
+            <Route path="event/checkout/:eventId" element={<CheckoutPage />} />
           </Routes>
         </main>
 

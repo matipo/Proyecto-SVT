@@ -8,12 +8,11 @@
 
   --primary-text-color: #111827;
   --secondary-text-color: #6b7280;
+  --terciary-text-color: #6f6189;
 }
 
 body {
   font-family: "Manrope", sans-serif;
-  margin: 0;
-  padding: 0;
   background-color: #f8f6f6;
 
   -webkit-font-smoothing: antialiased;

@@ -4,9 +4,10 @@ import { useParams, Link } from "react-router-dom";
 import EventHero from "../components/events/EventHero.jsx";
 import EventBody from "../components/events/EventBody.jsx";
 
+const BASE = import.meta.env.VITE_API_URL;
+
 export default function EventsPage() {
   const { eventId } = useParams();
-  const BASE = import.meta.env.VITE_API_URL;
 
   const [event, setEvent] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -62,11 +63,10 @@ export default function EventsPage() {
     );
   }
   return (
-    <div>
+    <div background-color="#f6f6f8">
       <EventHero name={event.name} image={event.image} />
 
       <EventBody event={event} />
-      <hr />
     </div>
   );
 }

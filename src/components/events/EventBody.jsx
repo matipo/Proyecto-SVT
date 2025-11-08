@@ -1,15 +1,16 @@
 import PurchaseTickets from "./PurchaseTickets";
-import "./EventBody.css";
 
 export default function EventBody({ event }) {
   return (
-    <div className="body-container">
-      <section className="info-container">
-        <div className="event-title-container">
-          <h1>{event.name}</h1>
+    <div className="flex justify-around mx-6">
+      <section>
+        <div>
+          <h1 className="my-5 text-6xl font-black text-(--primary-text-color)">
+            {event.name}
+          </h1>
         </div>
-        <div className="event-description-container">
-          <article>
+        <div className="grid grid-cols-2 gap-10 text-xl">
+          <article className="flex gap-2 content-center text-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -35,6 +36,7 @@ export default function EventBody({ event }) {
               <path d="M7.01 17h.005" />
               <path d="M10.01 17h.005" />
             </svg>
+
             <p>
               {new Date(event.date).toLocaleDateString("es-ES", {
                 weekday: "long",
@@ -44,7 +46,7 @@ export default function EventBody({ event }) {
               })}
             </p>
           </article>
-          <article>
+          <article className="flex gap-2 content-center text-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -68,7 +70,7 @@ export default function EventBody({ event }) {
               })}
             </p>
           </article>
-          <article>
+          <article className="flex gap-2 content-center text-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -90,7 +92,7 @@ export default function EventBody({ event }) {
         </div>
       </section>
 
-      <section className="event-ticket-container">
+      <section className=" w-full max-w-sm">
         <PurchaseTickets event={event} />
       </section>
     </div>
