@@ -8,6 +8,7 @@ import EventsPage from "./pages/EventsPage";
 
 import "./App.css";
 import CheckoutPage from "./pages/CheckoutPage";
+import CreateEventPage from "./pages/CreateEventPage";
 
 export default function App() {
   return (
@@ -16,9 +17,10 @@ export default function App() {
         <Header />
         <main className="grow">
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/event/:eventId" element={<EventsPage />} />
+            <Route index element={<HomePage />} />
+            <Route path="event/:eventId" element={<EventsPage />} />
             <Route path="event/checkout/:eventId" element={<CheckoutPage />} />
+            <Route path="createEvent" element={<CreateEventPage />} />
           </Routes>
         </main>
 

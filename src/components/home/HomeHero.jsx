@@ -11,7 +11,7 @@ export default function HomeHero({
   const [localQuery, setLocalQuery] = useState(searchQuery);
 
   const categories = [
-    { label: "🎵 Música", img: "", value: "music" },
+    { label: "🎵 Música", value: "music" },
     { label: "⚽ Deportes", value: "sports" },
     { label: "🎭 Teatro", value: "theater" },
     { label: "👨‍👩‍👧‍👦Conferencias", value: "conference" },

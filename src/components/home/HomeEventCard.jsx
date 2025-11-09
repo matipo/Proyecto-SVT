@@ -13,7 +13,8 @@ export default function HomeEventCard({ event }) {
           alt={event.name}
           className="block w-full object-cover aspect-auto rounded-lg pointer-events-none"
         />
-        <h2 className="mb-1 text-2xl w-auto font-bold">{event.name}</h2>
+        <h2 className="text-2xl w-auto font-bold">{event.name}</h2>
+        <p className="mb-1">{event.category}</p>
 
         <p className="text-(--terciary-text-color) text-m">
           {new Date(event.date).toLocaleDateString("es-CL", {
