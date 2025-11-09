@@ -12,10 +12,9 @@ import CheckoutPage from "./pages/CheckoutPage";
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="page-container">
+      <div className="flex flex-col min-h-screen">
         <Header />
-
-        <main>
+        <main className="grow">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/event/:eventId" element={<EventsPage />} />
