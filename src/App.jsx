@@ -7,8 +7,10 @@ import HomePage from "./pages/HomePage";
 import EventsPage from "./pages/EventsPage";
 
 import "./App.css";
-import CheckoutPage from "./pages/CheckoutPage";
+import ReservationPage from "./pages/ReservationPage";
 import CreateEventPage from "./pages/CreateEventPage";
+import CheckoutPage from "./pages/CheckoutPage";
+import PurchaseSuccessPage from "./pages/PurchaseSuccessPage";
 
 export default function App() {
   return (
@@ -19,8 +21,10 @@ export default function App() {
           <Routes>
             <Route index element={<HomePage />} />
             <Route path="event/:eventId" element={<EventsPage />} />
-            <Route path="event/checkout/:eventId" element={<CheckoutPage />} />
+            <Route path="event/reservation/:eventId" element={<ReservationPage />} />
             <Route path="createEvent" element={<CreateEventPage />} />
+            <Route path="event/checkout/" element={<CheckoutPage />} />
+            <Route path="/purchase-success" element={<PurchaseSuccessPage />} />
           </Routes>
         </main>
 

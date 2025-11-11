@@ -100,11 +100,11 @@ export default function PurchaseTickets({ event }) {
         </div>
 
         <Link
-          to={`/event/checkout/${event._id}?qty=${count}&type=${ticketType}`}
+          to={`/event/reservation/${event._id}?qty=${count}&type=${ticketType}`}
           state={{
             eventData: event,
           }}
-          className="flex rounded-2xl bg-(--primary-color) mt-4 cursor-pointer px-4 py-2 justify-center text-white font-bold"
+          className="flex rounded-lg bg-(--primary-color) mt-4 cursor-pointer px-4 py-2 justify-center text-white font-bold hover:bg-red-700 transition-colors"
         >
           Comprar Entradas
         </Link>

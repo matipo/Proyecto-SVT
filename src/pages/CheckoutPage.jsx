@@ -1,203 +1,278 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
-import CountdownTimer from "../components/checkout/CountdownTimer";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 
-export default function CheckoutPage() {
-  const [searchParams] = useSearchParams();
-  const quantity = Number(searchParams.get("qty"));
-  const ticketType = searchParams.get("type");
+function LoadingSpinner() {
+    return (
+        <div className="flex justify-center items-center p-10">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-red-600"></div>
+        </div>
+    );
+}
 
-  const location = useLocation();
-  const navigate = useNavigate();
 
-  const [reservation, setReservation] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+// Recibe reservationId y reservationItems como props separadas
+function PaymentForm({ reservationId, reservationItems, event, total }) {
+    const navigate = useNavigate();
 
-  if (!location.state?.eventData) {
-    return <div>Error: Datos del evento no encontrados.</div>;
-  }
+    // Estado para el formulario del comprador
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
 
-  const event = location.state.eventData;
+    // Estado para la llamada a la API
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [paymentError, setPaymentError] = useState(null);
 
-  // --- LÓGICA DE API CORREGIDA ---
-  useEffect(() => {
-    const reservationKey = `reservation_${event._id}_${ticketType}_${quantity}`;
+    const handleCheckoutSubmit = async (e) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        setPaymentError(null);
 
-    const loadReservation = async () => {
-      try {
-        const storedReservation = sessionStorage.getItem(reservationKey);
-        if (storedReservation) {
-          setReservation(JSON.parse(storedReservation));
-        } else {
-          const reservationRequest = {
-            event_id: event._id,
-            items: [{ type: ticketType, quantity: quantity }]
-          };
-          const response = await fetch('https://tickets.grye.org/reservations', {
-            method: 'POST',
-            headers: {
-              'accept': 'application/json',
-              'Content-Type': 'application/json'
+        const checkoutRequest = {
+            reservation_id: reservationId,
+            buyer: {
+                name: name,
+                email: email,
             },
-            body: JSON.stringify(reservationRequest)
-          });
-          const data = await response.json();
+        };
 
+        try {
+            const response = await fetch('https://tickets.grye.org/checkout', {
+                method: 'POST',
+                headers: {
+                    'accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(checkoutRequest)
+            });
 
-          if (!response.ok) {
-            console.error("Respuesta de error de la API:", data); // Muestra el error real
-            throw new Error(data.message || data.detail || 'Error al crear la reserva');
-          }
+            const data = await response.json();
 
-          setReservation(data);
-          sessionStorage.setItem(reservationKey, JSON.stringify(data));
+            if (!response.ok) {
+                let errorMessage = "Ocurrió un error.";
+
+                if (response.status === 400 && data.detail && typeof data.detail === 'string' && data.detail.includes("not active")) {
+                    errorMessage = "Tu reserva ha expirado o ya fue confirmada. Por favor, inténtalo de nuevo desde la página del evento.";
+                    const reservationKey = `reservation_${event._id}_${reservationItems[0].type}_${reservationItems[0].quantity}`;
+                    sessionStorage.removeItem(reservationKey);
+
+                } else if (data.detail) {
+                    if (typeof data.detail === 'object') {
+                        if (Array.isArray(data.detail) && data.detail[0] && data.detail[0].msg) {
+                            errorMessage = `Error en el campo ${data.detail[0].loc.join(' > ')}: ${data.detail[0].msg}`;
+                        } else if (data.detail.msg) {
+                            errorMessage = data.detail.msg;
+                        } else {
+                            errorMessage = `Error: ${JSON.stringify(data.detail)}`;
+                        }
+                    } else {
+                        errorMessage = data.detail;
+                    }
+                }
+
+                throw new Error(errorMessage);
+            }
+
+            const reservationKey = `reservation_${event._id}_${reservationItems[0].type}_${reservationItems[0].quantity}`;
+            sessionStorage.removeItem(reservationKey);
+
+            // Navegamos a la página de compra realizada, pasando los datos de la compra
+            navigate(`/purchase-success`, { state: { purchaseData: data, eventData: event } });
+
+        } catch (err) {
+            setPaymentError(err.message);
+            setIsSubmitting(false);
         }
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
     };
 
-    loadReservation();
-
-  }, [event._id, quantity, ticketType]); // Las dependencias están correctas
-
-
-  // Las funciones de 'timeout' y 'cancel' están perfectas.
-  // Son explícitas y SÍ deben borrar la reserva.
-  const handleTimeOut = async () => {
-    const reservationKey = `reservation_${event._id}_${ticketType}_${quantity}`;
-    sessionStorage.removeItem(reservationKey);
-    if (reservation?.reservation_id) {
-      try {
-        await fetch(`https://tickets.grye.org/reservations/${reservation.reservation_id}`, {
-          method: 'DELETE'
-        });
-      } catch (err) {
-        console.error("Error al cancelar la reserva en el servidor:", err);
-      }
-    }
-    alert("¡Tu tiempo se ha agotado! Tus asientos han sido liberados.");
-    navigate(`/event/${event._id}`);
-  };
-
-  const handleCancelClick = async () => {
-    const reservationKey = `reservation_${event._id}_${ticketType}_${quantity}`;
-    sessionStorage.removeItem(reservationKey);
-    if (reservation?.reservation_id) {
-      try {
-        await fetch(`https://tickets.grye.org/reservations/${reservation.reservation_id}`, {
-          method: 'DELETE'
-        });
-      } catch (err) {
-        console.error("Error al cancelar la reserva en el servidor:", err);
-      }
-    }
-    navigate(`/event/${event._id}`);
-  };
-
-
-  if (isLoading) {
     return (
-      <div className="p-10 text-center">
-        <h2 className="text-2xl font-bold">Cargando reserva...</h2>
-        <p>Estamos confirmando el stock.</p>
-      </div>
-    );
-  }
+        <form onSubmit={handleCheckoutSubmit} className="space-y-4">
 
-  if (error) {
-    return (
-      <div className="p-10 text-center">
-        <h2 className="text-2xl font-bold text-red-600">¡Ups! Hubo un problema</h2>
-        <p className="text-gray-700">{error}</p>
-        <button
+            {paymentError && (
+                <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                    <p className="font-bold">Error al confirmar</p>
+                    <p className="text-sm">{paymentError}</p>
+                </div>
+            )}
 
-          onClick={() => navigate(`/event/${event._id}`)}
-          className="mt-4 bg-red-600 text-white font-bold py-2 px-4 rounded hover:bg-red-700"
-        >
-          Volver a intentarlo
-        </button>
-      </div>
-    );
-  }
-
-  const subtotal = reservation ? reservation.total_price : 0;
-  const iva = subtotal * 0.19;
-  const total = subtotal + iva;
-
-  const selectedTicket = event.tickets.find(
-    (ticket) => ticket.type === ticketType
-  );
-  const price = selectedTicket ? selectedTicket.price : 0;
-
-  return (
-    <div className="">
-      <h1 className="text-3xl font-bold text-gray-900 m-6 max-w-6xl mx-auto">Resumen de tu Compra</h1>
-      <div className="flex flex-col lg:flex-row gap-8 max-w-6xl mx-auto">
-        <div className="w-full lg:w-2/3 bg-white rounded-xl shadow-lg p-6">
-          <div className="flex justify-center">
-            <CountdownTimer
-              expirationTime={reservation.expires_at}
-              onTimerEnd={handleTimeOut}
-            />
-          </div>
-          <hr className="my-6" />
-          <div>
-            <h2 className="text-2xl font-bold">{event.name}</h2>
-            <p className="text-gray-600 mb-6">{event.location}</p>
-            <fieldset className="border rounded-lg p-4 flex justify-between items-center">
-              <legend className="text-lg font-semibold">Detalles</legend>
-              <div>
-                <h4 className="font-semibold">{ticketType}</h4>
-                <p className="text-sm text-gray-600">
-                  {quantity} x ${price.toLocaleString('es-CL')} c/u
-                </p>
-              </div>
-
-              <span className="font-bold text-lg">${subtotal.toLocaleString('es-CL')}</span>
-            </fieldset>
-          </div>
-        </div>
-
-        <div className="w-full lg:w-1/3">
-          <div className="bg-white rounded-xl shadow-lg p-6 sticky top-8 h-full">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">
-              Resumen de Costos
-            </h3>
-            <div className="space-y-3 text-gray-700">
-              <div className="flex justify-between">
-                <span>Subtotal</span>
-
-                <span className="font-semibold">${subtotal.toLocaleString('es-CL')}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>IVA(19%)</span>
-                <span className="font-semibold">${iva.toLocaleString('es-CL')}</span>
-              </div>
-              <hr className="my-5" />
-              <div className="flex justify-between items-center text-xl font-bold text-gray-900">
-                <span>Total</span>
-                <span className="font-mono">${total.toLocaleString('es-CL')}</span>
-              </div>
-
-              <div className="flex justify-between text-sm text-gray-500 pt-2">
-                <span>ID Reserva</span>
-                <span className="font-mono">{reservation?.reservation_id}</span>
-              </div>
-
-              <button className=" w-full bg-red-600 text-white font-bold py-3 px-4 rounded-lg  hover:bg-red-700 transition-colors">
-                Pagar
-              </button>
-              <button onClick={handleCancelClick} className=" w-full bg-gray-600 text-white font-bold py-3 px-4 rounded-lg  hover:bg-gray-500 transition-colors">
-                Cancelar
-              </button>
+            <div>
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nombre Completo</label>
+                <input
+                    type="text"
+                    id="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                />
             </div>
-          </div>
+            <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+                <input
+                    type="email"
+                    id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="tu@email.com"
+                    required
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                />
+            </div>
+
+            <hr className="my-6" />
+
+            <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 transition-colors text-lg disabled:bg-gray-400 disabled:cursor-not-allowed"
+            >
+                {isSubmitting ? "Procesando..." : `Confirmar y Pagar $${total.toLocaleString('es-CL', { maximumFractionDigits: 0 })}`}
+            </button>
+        </form>
+    );
+}
+
+
+export default function CheckoutPage() {
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    // Estados para la validación inicial
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [validReservation, setValidReservation] = useState(null);
+
+    // Obtenemos los datos pasados desde la página anterior
+    const passedReservation = location.state?.reservationData;
+    const event = location.state?.eventData;
+
+    useEffect(() => {
+        // Si no nos pasaron una reserva, no podemos continuar
+        if (!passedReservation || !passedReservation.reservation_id) {
+            setError("No se encontraron datos de la reserva.");
+            setIsLoading(false);
+            return;
+        }
+
+        // Función para Validar la reserva ANTES de mostrar el formulario
+        const validateReservation = async () => {
+            try {
+                const response = await fetch(`https://tickets.grye.org/reservations/${passedReservation.reservation_id}`);
+
+                if (response.status === 404) {
+                    throw new Error("Tu reserva ha expirado o no fue encontrada. Por favor, inténtalo de nuevo.");
+                }
+
+                if (!response.ok) {
+                    const data = await response.json();
+
+                    if (data.status === 'expired' || (data.detail && data.detail.includes("expired"))) {
+                        throw new Error("Tu reserva ha expirado. Por favor, inténtalo de nuevo.");
+                    }
+                    throw new Error("Hubo un problema al verificar tu reserva.");
+                }
+
+                const data = await response.json();
+
+
+                setValidReservation(data);
+
+            } catch (err) {
+                setError(err.message);
+
+                // Si la reserva es inválida, la borramos de sessionStorage
+                if (event?._id && passedReservation?.items?.[0]?.type && passedReservation?.items?.[0]?.quantity) {
+                    const reservationKey = `reservation_${event._id}_${passedReservation.items[0].type}_${passedReservation.items[0].quantity}`;
+                    sessionStorage.removeItem(reservationKey);
+                }
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        validateReservation();
+
+    }, [passedReservation, navigate, event]);
+
+    // ---- RENDERIZADO ----
+
+    if (isLoading) {
+        return (
+            <div className="p-10 text-center">
+                <h2 className="text-2xl font-bold">Validando tu reserva...</h2>
+                <LoadingSpinner />
+            </div>
+        );
+    }
+
+    if (error || !validReservation) {
+        return (
+            <div className="p-10 text-center max-w-lg mx-auto bg-white shadow-lg rounded-xl">
+                <h2 className="text-2xl font-bold text-red-600">¡Ups! Hubo un problema</h2>
+                <p className="text-gray-700 my-4">{error || "No se pudo cargar la reserva."}</p>
+                <button
+                    onClick={() => navigate(event ? `/event/${event._id}` : '/')}
+                    className="mt-4 bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-700"
+                >
+                    Volver al evento
+                </button>
+            </div>
+        );
+    }
+
+    const subtotal = validReservation.total_price;
+    const iva = subtotal * 0.19;
+    const total = subtotal + iva;
+
+    return (
+        <div className="p-4 md:p-6 max-w-4xl mx-auto">
+            <h1 className="text-3xl font-bold text-gray-900 mb-6">Completa tu Pago</h1>
+            <div className="flex flex-col lg:flex-row gap-8">
+
+                {/* Columna Izquierda: Formulario de Pago */}
+                <div className="w-full lg:w-2/3 bg-white rounded-xl shadow-lg p-6">
+                    <h2 className="text-2xl font-bold mb-4">Datos del Comprador</h2>
+                    <PaymentForm
+                        reservationId={passedReservation.reservation_id}
+                        reservationItems={validReservation.items}
+                        event={event}
+                        total={total}
+                    />
+                </div>
+
+                {/* Columna Derecha: Resumen */}
+                <div className="w-full lg:w-1/3">
+                    <div className="bg-white rounded-xl shadow-lg p-6 sticky top-8">
+                        <h3 className="text-xl font-bold text-gray-900 mb-4">
+                            Tu Pedido
+                        </h3>
+                        <div className="mb-4">
+                            <h4 className="font-bold">{event.name}</h4>
+                            <p className="text-sm text-gray-600">{validReservation.items[0].quantity} x {validReservation.items[0].type}</p>
+                        </div>
+                        <div className="space-y-2 text-gray-700">
+                            <div className="flex justify-between">
+                                <span>Subtotal</span>
+                                <span className="font-semibold">${subtotal.toLocaleString('es-CL')}</span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>IVA (19%)</span>
+                                <span className="font-semibold">${iva.toLocaleString('es-CL', { maximumFractionDigits: 0 })}</span>
+                            </div>
+                            <hr className="my-3" />
+                            <div className="flex justify-between items-center text-xl font-bold text-gray-900">
+                                <span>Total</span>
+                                <span className="font-mono">${total.toLocaleString('es-CL', { maximumFractionDigits: 0 })}</span>
+                            </div>
+                        </div>
+                        <Link
+                            to={`/event/${event._id}`}
+                            className="text-center w-full inline-block mt-4 text-sm text-gray-600 hover:text-red-800 hover:underline"
+                        >
+                            Volver al evento
+                        </Link>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 }

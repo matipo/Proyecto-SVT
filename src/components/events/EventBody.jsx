@@ -2,8 +2,8 @@ import PurchaseTickets from "./PurchaseTickets";
 
 export default function EventBody({ event }) {
   return (
-    <div className="flex justify-around mx-6">
-      <section>
+    <div className="flex flex-col lg:flex-row gap-8 justify-around content-center mx-8">
+      <section className="w-full max-w-8xl">
         <div>
           <h1 className="my-5 text-6xl font-black text-(--primary-text-color)">
             {event.name}
@@ -92,7 +92,7 @@ export default function EventBody({ event }) {
         </div>
       </section>
 
-      <section className=" w-full max-w-sm">
+      <section className="w-xl justify-center">
         <PurchaseTickets event={event} />
       </section>
     </div>

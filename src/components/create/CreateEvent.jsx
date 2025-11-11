@@ -210,7 +210,7 @@ export default function CreateEvent() {
         <button
           type="button"
           onClick={handleAddTicket}
-          className="bg-blue-500 text-white px-3 py-2 rounded"
+          className="bg-gray-600 text-white px-3 py-2 rounded hover:bg-gray-500 transition-colors"
         >
           + Añadir Ticket
         </button>
@@ -241,13 +241,13 @@ export default function CreateEvent() {
 
       <button
         type="submit"
-        className="bg-(--primary-color) text-white p-3 rounded font-bold"
+        className="bg-(--primary-color) text-white p-3 rounded font-bold hover:bg-red-700 transition-colors"
         disabled={isLoading}
       >
         {isLoading ? "Creando evento..." : "Crear Evento"}
       </button>
 
-      {error && <p className="text-red-500 text-center font-bold">{error}</p>}
+      {error && <p className="text-red-500 text-center font-bold ">{error}</p>}
     </form>
   );
 }
