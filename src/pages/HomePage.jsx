@@ -2,13 +2,17 @@ import React, { useState, useEffect } from "react";
 import HomeHero from "../components/home/HomeHero";
 import HomeEventList from "../components/home/HomeEventList";
 
+const BASE = import.meta.env.VITE_API_URL;
+
 export default function HomePage() {
   const [events, setEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const BASE = import.meta.env.VITE_API_URL;
+
+  const [currentlyPage, setCurrentlyPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
 
   useEffect(() => {
     setIsLoading(true);
@@ -24,7 +28,7 @@ export default function HomePage() {
     }
 
     params.append("limit", "20");
-    params.append("page", "1");
+    params.append("page", currentlyPage.toString());
 
     const url = `${BASE}events?${params.toString()}`;
 
@@ -45,18 +49,29 @@ export default function HomePage() {
       })
       .then((data) => {
         setEvents(data.data || []);
+        setTotalPage(data.total || 0);
         setIsLoading(false);
       })
       .catch((error) => {
         setIsError(error);
         setEvents([]);
+        setTotalPage(1);
         setIsLoading(false);
       });
-  }, [searchQuery, selectedCategory, BASE]);
+  }, [searchQuery, selectedCategory, currentlyPage, BASE]);
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
     setSearchQuery("");
+    setCurrentlyPage(1);
+  };
+
+  const handleNextPage = () => {
+    setCurrentlyPage((page) => Math.min(page + 1, totalPage));
+  };
+
+  const handlePreviousPage = () => {
+    setCurrentlyPage((page) => Math.max(page - 1, 1));
   };
 
   return (
@@ -65,9 +80,18 @@ export default function HomePage() {
         searchQuery={searchQuery}
         onSearchQuery={setSearchQuery}
         selectedCategory={selectedCategory}
-        onCategoryChange={handleCategoryChange} // Pasa la nueva función
+        onCategoryChange={handleCategoryChange}
       />
-      <HomeEventList event={events} isLoading={isLoading} isError={isError} />
+
+      <HomeEventList
+        event={events}
+        isLoading={isLoading}
+        isError={isError}
+        handleNextButton={handleNextPage}
+        handlePreviousButton={handlePreviousPage}
+        currentlyPage={currentlyPage}
+        totalPage={totalPage}
+      />
     </div>
   );
 }

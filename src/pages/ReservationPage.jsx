@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams, useLocation, Link } from "react-router-dom";
 import CountdownTimer from "../components/reservation/CountdownTimer";
 
+const BASE = import.meta.env.VITE_API_URL;
+
 export default function ReservationPage() {
   const [searchParams] = useSearchParams();
   const quantity = Number(searchParams.get("qty"));
@@ -9,6 +11,8 @@ export default function ReservationPage() {
 
   const location = useLocation();
   const navigate = useNavigate();
+
+  const url = `${BASE}reservations`;
 
   const [reservation, setReservation] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -34,7 +38,7 @@ export default function ReservationPage() {
             event_id: event._id,
             items: [{ type: ticketType, quantity: quantity }]
           };
-          const response = await fetch('https://tickets.grye.org/reservations', {
+          const response = await fetch(url, {
             method: 'POST',
             headers: {
               'accept': 'application/json',

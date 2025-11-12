@@ -11,17 +11,14 @@ export default function Header() {
       </div>
 
       <nav className="justify-self-center flex items-center">
-        <a href="/cart" className="text-black mx-4 no-underline">
-          Eventos
-        </a>
-        <a href="#" className="text-black mx-4 no-underline">
-          Mis tickets
-        </a>
+        <Link to={"/"} className="text-black mx-4 no-underline">Eventos</Link>
+        <Link to={"purchase-history"} className="text-black mx-4 no-underline">Historial de compras</Link>
+
       </nav>
 
       <div className="flex items-center gap-4 justify-self-end">
         <Link
-          to={"createEvent/"}
+          to={"create-event/"}
           className="bg-(--primary-color) text-white px-4 py-2 rounded-full text-base hover:opacity-90 transition"
         >
           Crear Evento

@@ -11,7 +11,11 @@ export default function HomeEventCard({ event }) {
         <img
           src={event.image}
           alt={event.name}
-          className="block w-full object-cover aspect-auto rounded-lg pointer-events-none"
+          onError={(e) => {
+            e.target.src =
+              "https://placehold.co/600x400?text=Imagen+no+disponible";
+          }}
+          className="block h-74 w-full object-cover aspect-auto rounded-lg pointer-events-none"
         />
         <h2 className="text-2xl w-auto font-bold">{event.name}</h2>
         <p className="mb-1">{event.category}</p>

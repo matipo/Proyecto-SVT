@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 
+const BASE = import.meta.env.VITE_API_URL;
+
 function LoadingSpinner() {
     return (
         <div className="flex justify-center items-center p-10">
@@ -13,6 +15,7 @@ function LoadingSpinner() {
 // Recibe reservationId y reservationItems como props separadas
 function PaymentForm({ reservationId, reservationItems, event, total }) {
     const navigate = useNavigate();
+    const url = `${BASE}checkout`;
 
     // Estado para el formulario del comprador
     const [name, setName] = useState("");
@@ -36,7 +39,7 @@ function PaymentForm({ reservationId, reservationItems, event, total }) {
         };
 
         try {
-            const response = await fetch('https://tickets.grye.org/checkout', {
+            const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'accept': 'application/json',
@@ -76,7 +79,7 @@ function PaymentForm({ reservationId, reservationItems, event, total }) {
             sessionStorage.removeItem(reservationKey);
 
             // Navegamos a la página de compra realizada, pasando los datos de la compra
-            navigate(`/purchase-success`, { state: { purchaseData: data, eventData: event } });
+            navigate(`/event/purchase-success`, { state: { purchaseData: data, eventData: event } });
 
         } catch (err) {
             setPaymentError(err.message);
