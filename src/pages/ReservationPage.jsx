@@ -79,7 +79,7 @@ export default function ReservationPage() {
     if (reservation?.reservation_id) {
       try {
         await fetch(
-          `https://tickets.grye.org/reservations/${reservation.reservation_id}`,
+          `${url}/${reservation.reservation_id}`,
           {
             method: "DELETE",
           }

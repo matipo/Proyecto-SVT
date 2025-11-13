@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 
 const BASE = import.meta.env.VITE_API_URL;
-
+const url2 = `${BASE}reservations`;
 function LoadingSpinner() {
     return (
         <div className="flex justify-center items-center p-10">
@@ -159,7 +159,7 @@ export default function CheckoutPage() {
         // Función para Validar la reserva ANTES de mostrar el formulario
         const validateReservation = async () => {
             try {
-                const response = await fetch(`https://tickets.grye.org/reservations/${passedReservation.reservation_id}`);
+                const response = await fetch(`${url2}/${passedReservation.reservation_id}`);
 
                 if (response.status === 404) {
                     throw new Error("Tu reserva ha expirado o no fue encontrada. Por favor, inténtalo de nuevo.");
