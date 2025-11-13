@@ -45,7 +45,7 @@ export default function HomeEventList({
   }
 
   return (
-    <div className="mx-10">
+    <div className="mx-10 my-6">
       <div className="flex justify-between items-center gap-4 mb-6">
         <h1 className="text-4xl font-black">Eventos</h1>
         <div className="flex items-center gap-4">

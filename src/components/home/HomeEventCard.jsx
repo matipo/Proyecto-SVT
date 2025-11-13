@@ -6,7 +6,7 @@ export default function HomeEventCard({ event }) {
   const minPrice = prices.length > 0 ? Math.min(...prices) : null;
 
   return (
-    <article className="flex flex-col h-115 w-full max-w-380 overflow-hidden bg-white p-2 rounded-lg shadow-xl hover:bg-(--terciary-color) ">
+    <article className="flex flex-col h-115 w-full max-w-380 overflow-hidden bg-white p-2 rounded-lg shadow-xl duration-300 hover:scale-105 ">
       <Link to={`/event/${event._id}`}>
         <img
           // Funcionalidad para cuando no hay imagen
