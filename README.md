@@ -9,7 +9,13 @@ Proyecto SVT
   <a href="#instalación-para-colaboradores">Instalación</a> |
   <a href="#ejecutando-el-proyecto">Ejecutando el Proyecto</a>
 </div>
-
+<h3 align="center">
+  Integrantes:
+Matias Rocha
+Miguel Rocha
+Cristofer Leiva
+Tomas Serrudo
+  </h3>
 <p align="center">Aplicacion web para el proyecto del ramo Tecnologias web y moviles</p>
 
 ## 🛠️ Requisitos
