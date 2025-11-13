@@ -66,8 +66,12 @@ export default function HomePage() {
     setCurrentlyPage(1);
   };
 
+  const handleTotalPages = (total) => {
+    return Math.ceil(total / 20);
+  };
+
   const handleNextPage = () => {
-    setCurrentlyPage((page) => Math.min(page + 1, totalPage));
+    setCurrentlyPage((page) => Math.min(page + 1, 3));
   };
 
   const handlePreviousPage = () => {
@@ -90,7 +94,7 @@ export default function HomePage() {
         handleNextButton={handleNextPage}
         handlePreviousButton={handlePreviousPage}
         currentlyPage={currentlyPage}
-        totalPage={totalPage}
+        totalPage={handleTotalPages(totalPage)}
       />
     </div>
   );
