@@ -1,0 +1,64 @@
+.hero-section {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin: 1.5rem;
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.hero-content h1 {
+  font-weight: 800;
+  font-size: 5rem;
+  color: var(--primary-text-color);
+
+  margin: 0;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+}
+
+.search-bar-container {
+  margin-top: 2rem;
+  position: relative;
+  width: 100%;
+}
+
+.search-icon-svg {
+  position: absolute;
+  margin-left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  width: 25px;
+  height: 25px;
+  pointer-events: none;
+}
+
+.input-icon {
+  width: 30%;
+  padding-left: 45px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 30px;
+  box-sizing: border-box;
+}
+
+.hero-buttons {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.hero-buttons button {
+  background-color: #ffffff;
+  padding: 10px 15px;
+  border: 2px solid var(--cuarto-color);
+  cursor: pointer;
+  border-radius: 1rem;
+}
