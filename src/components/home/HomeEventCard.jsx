@@ -1,23 +1,24 @@
 import { Link } from "react-router-dom";
-
+const IMAGEN_DEFECTO = "https://placehold.co/600x400?text=Imagen+no+disponible";
 export default function HomeEventCard({ event }) {
   const prices = event.tickets.map((ticket) => ticket.price);
 
   const minPrice = prices.length > 0 ? Math.min(...prices) : null;
 
   return (
-    <article className="flex flex-col w-full max-w-380 overflow-hidden bg-white p-2 rounded-lg shadow-xl hover:bg-(--terciary-color) ">
+    <article className="flex flex-col h-115 w-full max-w-380 overflow-hidden bg-white p-2 rounded-lg shadow-xl hover:bg-(--terciary-color) ">
       <Link to={`/event/${event._id}`}>
         <img
-          src={event.image}
+          // Funcionalidad para cuando no hay imagen
+          src={event.image || IMAGEN_DEFECTO}
           alt={event.name}
           onError={(e) => {
-            e.target.src =
-              "https://placehold.co/600x400?text=Imagen+no+disponible";
+            e.target.src = IMAGEN_DEFECTO;
+            e.target.onerror = null;
           }}
           className="block h-full max-h-74 w-full min-w-9xs object-cover aspect-auto rounded-lg pointer-events-none"
         />
-        <h2 className="text-2xl w-auto font-bold">{event.name}</h2>
+        <h2 className="text-2xl w-auto font-bold capitalize ">{event.name}</h2>
         <p className="mb-1">{event.category}</p>
 
         <p className="text-(--terciary-text-color) text-m">

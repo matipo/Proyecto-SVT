@@ -45,28 +45,30 @@ export default function HomeEventList({
   }
 
   return (
-    <div className="m-4">
-      <h1 className="text-4xl font-black">Próximos Eventos</h1>
-      <div className="flex justify-end items-center gap-4">
-        <button
-          className="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-500 transition-colors"
-          onClick={handlePreviousButton}
-          disabled={currentlyPage === 1}
-        >
-          Anterior
-        </button>
+    <div className="mx-10">
+      <div className="flex justify-between items-center gap-4 mb-6">
+        <h1 className="text-4xl font-black">Eventos</h1>
+        <div className="flex items-center gap-4">
+          <button
+            className="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-500 transition-colors"
+            onClick={handlePreviousButton}
+            disabled={currentlyPage === 1}
+          >
+            Anterior
+          </button>
 
-        <span className="font-semibold">
-          Página {currentlyPage} de {totalPage}
-        </span>
+          <span className="font-semibold">
+            Página {currentlyPage} de {totalPage}
+          </span>
 
-        <button
-          className="bg-(--primary-color) text-white font-semibold py-2 px-4 rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:bg-red-700"
-          onClick={handleNextButton}
-          disabled={currentlyPage === totalPage}
-        >
-          Siguiente
-        </button>
+          <button
+            className="bg-(--primary-color) text-white font-semibold py-2 px-4 rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:bg-red-700"
+            onClick={handleNextButton}
+            disabled={currentlyPage === totalPage}
+          >
+            Siguiente
+          </button>
+        </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {event.map((e) => (

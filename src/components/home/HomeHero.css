@@ -16,6 +16,10 @@
   margin: 0;
 }
 
+.hero-content h1 span {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
 .hero-content p {
   font-size: 1.2rem;
 }

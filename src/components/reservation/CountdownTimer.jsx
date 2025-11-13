@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 /**
  * Calcula los segundos restantes
  * @param {string} expirationISOString - La fecha en formato ISO ("2025-11-08T22:20:08.226Z")
  */
-const getRemainingSeconds = expirationISOString => {
+const getRemainingSeconds = (expirationISOString) => {
   // Si no hay fecha,no hay tiempo.
   if (!expirationISOString) return 0;
 
@@ -13,8 +13,7 @@ const getRemainingSeconds = expirationISOString => {
   // Obtiene la hora actual
   const now = new Date();
 
-
-  // (getTime() siempre es en UTC, así que la resta funciona
+  // (getTime() es en UTC, así que la resta funciona
   //  independientemente de la zona horaria del usuario)
   const differenceInMs = expirationDate.getTime() - now.getTime();
 
@@ -23,25 +22,25 @@ const getRemainingSeconds = expirationISOString => {
 };
 
 const CountdownTimer = ({ expirationTime, onTimerEnd }) => {
-
+  // Estado que guarda los segundos restantes hasta la expiración.
   const [totalSeconds, setTotalSeconds] = useState(() =>
     getRemainingSeconds(expirationTime)
   );
 
-
   useEffect(() => {
+    //recalculamos cuantos segundos faltan y reiniciamos el contador.
     setTotalSeconds(getRemainingSeconds(expirationTime));
   }, [expirationTime]);
-
-
+  // Si el contador ya llegó a 0 o menos.
   useEffect(() => {
     if (totalSeconds <= 0) {
       if (onTimerEnd) onTimerEnd();
       return;
     }
-
+    // Creamos un intervalo que se ejecuta cada 1000ms (1 segundo)
+    // y resta 1 segundo del contador.
     const intervalId = setInterval(() => {
-      setTotalSeconds(prevSeconds => prevSeconds - 1);
+      setTotalSeconds((prevSeconds) => prevSeconds - 1);
     }, 1000);
 
     return () => clearInterval(intervalId);
@@ -51,10 +50,8 @@ const CountdownTimer = ({ expirationTime, onTimerEnd }) => {
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
 
-  const formattedMinutes = String(minutes).padStart(2, '0');
-  const formattedSeconds = String(seconds).padStart(2, '0');
-
-
+  const formattedMinutes = String(minutes).padStart(2, "0");
+  const formattedSeconds = String(seconds).padStart(2, "0");
 
   return (
     <div>

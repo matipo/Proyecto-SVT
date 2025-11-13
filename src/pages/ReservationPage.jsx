@@ -22,7 +22,7 @@ export default function ReservationPage() {
   const [reservation, setReservation] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  // muestra error si no llegan datos
   if (!location.state?.eventData) {
     return <div>Error: Datos del evento no encontrados.</div>;
   }
@@ -30,6 +30,7 @@ export default function ReservationPage() {
   const event = location.state.eventData;
 
   // --- LÓGICA DE API ---
+  // Hook que obtiene datos de la API
   useEffect(() => {
     const reservationKey = `reservation_${event._id}_${ticketType}_${quantity}`;
 
@@ -72,18 +73,15 @@ export default function ReservationPage() {
 
     loadReservation();
   }, [event._id, quantity, ticketType]);
-
+  // logica que de reserva cuando se cancela o se acaba el tiempo
   const handleTimeOut = async () => {
     const reservationKey = `reservation_${event._id}_${ticketType}_${quantity}`;
     sessionStorage.removeItem(reservationKey);
     if (reservation?.reservation_id) {
       try {
-        await fetch(
-          `${url}/${reservation.reservation_id}`,
-          {
-            method: "DELETE",
-          }
-        );
+        await fetch(`${url}/${reservation.reservation_id}`, {
+          method: "DELETE",
+        });
       } catch (err) {
         console.error("Error al cancelar la reserva en el servidor:", err);
       }
@@ -132,7 +130,7 @@ export default function ReservationPage() {
       </div>
     );
   }
-
+  //calculos de los precios con el iva
   const subtotal = reservation ? reservation.total_price : 0;
   const iva = subtotal * 0.19;
   const total = subtotal + iva;

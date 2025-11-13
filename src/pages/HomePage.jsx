@@ -14,6 +14,7 @@ export default function HomePage() {
   const [currentlyPage, setCurrentlyPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
 
+  // Hook que obtiene datos de la API cuando se cambia de pagina
   useEffect(() => {
     setIsLoading(true);
     setIsError(null);
@@ -32,6 +33,7 @@ export default function HomePage() {
 
     const url = `${BASE}events?${params.toString()}`;
 
+    // llamada de la API
     fetch(url, {
       method: "GET",
       headers: {
@@ -60,12 +62,14 @@ export default function HomePage() {
       });
   }, [searchQuery, selectedCategory, currentlyPage, BASE]);
 
+  //cambia las categorias y reinicia busquea y pagina
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
     setSearchQuery("");
     setCurrentlyPage(1);
   };
 
+  //logica para hacer que en cada pagina haya 20 eventos
   const handleTotalPages = (total) => {
     return Math.ceil(total / 20);
   };
@@ -78,6 +82,7 @@ export default function HomePage() {
     setCurrentlyPage((page) => Math.max(page - 1, 1));
   };
 
+  //componentes
   return (
     <div>
       <HomeHero

@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { useLocation, Link, Navigate, useNavigate } from "react-router-dom";
+
+// |||||||||| Icono del check ||||||||||
 function CheckIcon() {
   return (
     <svg
@@ -20,13 +22,14 @@ function CheckIcon() {
 }
 
 export default function PurchaseSuccessPage() {
+  // Hook que permite acceder a la ubicación actual
   const location = useLocation();
   const navigate = useNavigate();
 
   const purchaseData = location.state?.purchaseData;
   const eventData = location.state?.eventData;
 
-  // Si no hay datos de compra (p.ej. usuario recarga la página o entra directo)
+  // Si no hay datos de compra
   // lo redirigimos al inicio.
   if (!purchaseData || !eventData) {
     // Esta es la primera línea de defensa. Si el estado se pierde, redirige.
@@ -34,16 +37,19 @@ export default function PurchaseSuccessPage() {
   }
 
   useEffect(() => {
+    // Solo ejecuta si existen los datos
     if (purchaseData && eventData) {
+      // Leemos el historial actual
       const historialExistente = localStorage.getItem("purchaseHistory");
+      // Lo iniciamos como arreglo vacío
       const historialArray = historialExistente
         ? JSON.parse(historialExistente)
         : [];
-
+      // Verificamos si esta compra ya fue guardada antes
       const yaExiste = historialArray.some(
         (compra) => compra.id === purchaseData._id
       );
-
+      // Si no está guardada, la agregamos al historial
       if (!yaExiste) {
         const nuevaCompra = {
           id: purchaseData._id,
@@ -53,13 +59,14 @@ export default function PurchaseSuccessPage() {
           tickets: purchaseData.tickets,
           date: new Date().toISOString(),
         };
-
+        // Se guarda en el localstorage
         historialArray.push(nuevaCompra);
         localStorage.setItem("purchaseHistory", JSON.stringify(historialArray));
       }
     }
   }, [purchaseData, eventData, location.state]);
 
+  //Variables para mostrar en la interfaz
   const buyer = purchaseData?.buyer;
   const tickets = purchaseData?.tickets;
   const total_price = purchaseData?.total_price;

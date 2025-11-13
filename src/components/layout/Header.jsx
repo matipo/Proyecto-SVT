@@ -11,9 +11,12 @@ export default function Header() {
       </div>
 
       <nav className="justify-self-center flex items-center">
-        <Link to={"/"} className="text-black mx-4 no-underline">Eventos</Link>
-        <Link to={"purchase-history"} className="text-black mx-4 no-underline">Historial de compras</Link>
-
+        <Link to={"/"} className="text-black mx-4 no-underline">
+          Eventos
+        </Link>
+        <Link to={"purchase-history"} className="text-black mx-4 no-underline">
+          Historial de compras
+        </Link>
       </nav>
 
       <div className="flex items-center gap-4 justify-self-end">

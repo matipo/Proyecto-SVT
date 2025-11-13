@@ -33,7 +33,9 @@ export default function HomeHero({
   return (
     <section className="hero-section">
       <div className="hero-content">
-        <h1>Descubre Eventos Inolvidables</h1>
+        <h1>
+          Descubre Eventos <span>Inolvidables</span>
+        </h1>
         <p>
           Encuentra conciertos, festivales, deportes y mas. Tu proxima gran
           experiencia esta a solo un click.
